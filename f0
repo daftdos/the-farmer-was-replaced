@@ -1,0 +1,92 @@
+clear()
+#Movement algorithm
+def scout(n):
+	#Navigator - snake pattern to cut down on travel time off borders
+	x, y = get_pos_x(),get_pos_y()
+	wall = get_world_size()
+	
+	if y % 2 == 0:
+		moving_right = True
+	else:
+		moving_right = False
+	
+	for i in range(n):
+		if moving_right:
+			if x < wall - 1:
+				move(East)
+				x += 1
+			else:
+				move(North)
+				y = (y + 1) % wall
+				moving_right = False
+		else:
+			if x > 0:
+				move(West)
+				x -= 1
+			else:
+				move(North)
+				y = (y + 1) % wall
+				moving_right = True
+
+#seedList = [Entities.Tree, Entities.Carrot, Entities.Pumpkin, Entities.Sunflower]
+#maintenanceList = [Items.Water, Items.Fertilizer]
+
+#Hat mode
+change_hat(Hats.Straw_Hat)
+while num_items(Items.Hay) <= 1800000:
+	if can_harvest():
+		harvest()
+		plant(Entities.Grass)	
+		scout(1)
+	else:
+		scout(1)
+
+#Ferngully mode
+change_hat(Hats.Tree_Hat)
+plants = [Entities.Tree, Entities.Bush]
+while num_items(Items.Wood) <= 1800000:
+	if can_harvest():
+		harvest()
+		plant(Entities.Bush)
+		scout(1)
+		if can_harvest():
+			harvest()
+			plant(Entities.Tree)
+			if get_water() < 0.2:
+				#print("WaterWater")
+				use_item(Items.Water)
+		scout(1)
+
+#carrots
+change_hat(Hats.Purple_Hat)
+while num_items(Items.Carrot) <= 110000:
+	if get_ground_type() != Grounds.Soil:
+		till()
+		plant(Entities.Carrot)
+		scout(1)
+	else:
+		#print("Carrots?")
+		if can_harvest():
+			harvest()
+			plant(Entities.Carrot)
+			scout(1)
+			if can_harvest():
+				harvest()
+				plant(Entities.Sunflower)
+				scout(1)
+
+#spooky
+change_hat(Hats.Traffic_Cone)		
+while num_items(Items.Pumpkin) <= 1000000:
+	if get_ground_type() != Grounds.Soil:
+		till()
+		plant(Entities.Pumpkin)
+		scout(1)
+	else:
+		#print("Carrots?")
+		#if can_harvest():
+			harvest()
+			plant(Entities.Pumpkin)
+			scout(1)
+			
+
